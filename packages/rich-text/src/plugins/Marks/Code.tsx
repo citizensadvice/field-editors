@@ -9,8 +9,10 @@ import * as Slate from 'slate-react';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
 import { focus } from '../../helpers/editor';
+import { TrackingProvider, useTrackingContext } from '../../TrackingProvider';
 import { RichTextPlugin } from '../../types';
 import { ToolbarButton } from '../shared/ToolbarButton';
+import { buildMarkEventHandler } from './helpers';
 
 interface ToolbarCodeButtonProps {
   isDisabled?: boolean;
@@ -18,9 +20,13 @@ interface ToolbarCodeButtonProps {
 
 export function ToolbarCodeButton(props: ToolbarCodeButtonProps) {
   const editor = useContentfulEditor();
+  const tracking = useTrackingContext();
 
   function handleClick() {
     if (!editor?.selection) return;
+
+    const isActive = isMarkActive(editor, MARKS.CODE);
+    tracking.onToolbarAction(isActive ? 'unmark' : 'mark', { markType: MARKS.CODE });
 
     toggleMark(editor, { key: MARKS.CODE });
     focus(editor);
@@ -55,12 +61,15 @@ export function Code(props: Slate.RenderLeafProps) {
   );
 }
 
-export const createCodePlugin = (): RichTextPlugin =>
+export const createCodePlugin = (tracking: TrackingProvider): RichTextPlugin =>
   createDefaultCodePlugin({
     type: MARKS.CODE,
     component: Code,
     options: {
       hotkey: ['mod+/'],
+    },
+    handlers: {
+      onKeyDown: buildMarkEventHandler(tracking, MARKS.CODE),
     },
     deserializeHtml: {
       rules: [

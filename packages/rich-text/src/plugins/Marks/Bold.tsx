@@ -9,8 +9,10 @@ import * as Slate from 'slate-react';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
 import { focus } from '../../helpers/editor';
+import { TrackingProvider, useTrackingContext } from '../../TrackingProvider';
 import { RichTextPlugin } from '../../types';
 import { ToolbarButton } from '../shared/ToolbarButton';
+import { buildMarkEventHandler } from './helpers';
 
 interface ToolbarBoldButtonProps {
   isDisabled?: boolean;
@@ -18,9 +20,13 @@ interface ToolbarBoldButtonProps {
 
 export function ToolbarBoldButton(props: ToolbarBoldButtonProps) {
   const editor = useContentfulEditor();
+  const tracking = useTrackingContext();
 
   function handleClick() {
     if (!editor?.selection) return;
+
+    const isActive = isMarkActive(editor, MARKS.BOLD);
+    tracking.onToolbarAction(isActive ? 'unmark' : 'mark', { markType: MARKS.BOLD });
 
     toggleMark(editor, { key: MARKS.BOLD });
     focus(editor);
@@ -57,12 +63,15 @@ export function Bold(props: Slate.RenderLeafProps) {
 const isGoogleBoldWrapper = (el: HTMLElement) =>
   el.id.startsWith('docs-internal-guid') && el.nodeName === 'B';
 
-export const createBoldPlugin = (): RichTextPlugin =>
+export const createBoldPlugin = (tracking: TrackingProvider): RichTextPlugin =>
   createDefaultBoldPlugin({
     type: MARKS.BOLD,
     component: Bold,
     options: {
       hotkey: ['mod+b'],
+    },
+    handlers: {
+      onKeyDown: buildMarkEventHandler(tracking, MARKS.BOLD),
     },
     deserializeHtml: {
       rules: [

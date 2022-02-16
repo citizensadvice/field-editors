@@ -8,8 +8,10 @@ import * as Slate from 'slate-react';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
 import { focus } from '../../helpers/editor';
+import { TrackingProvider, useTrackingContext } from '../../TrackingProvider';
 import { RichTextPlugin } from '../../types';
 import { ToolbarButton } from '../shared/ToolbarButton';
+import { buildMarkEventHandler } from './helpers';
 
 interface ToolbarUnderlineButtonProps {
   isDisabled?: boolean;
@@ -17,9 +19,13 @@ interface ToolbarUnderlineButtonProps {
 
 export function ToolbarUnderlineButton(props: ToolbarUnderlineButtonProps) {
   const editor = useContentfulEditor();
+  const tracking = useTrackingContext();
 
   function handleClick() {
     if (!editor?.selection) return;
+
+    const isActive = isMarkActive(editor, MARKS.UNDERLINE);
+    tracking.onToolbarAction(isActive ? 'unmark' : 'mark', { markType: MARKS.UNDERLINE });
 
     toggleMark(editor, { key: MARKS.UNDERLINE });
     focus(editor);
@@ -43,12 +49,15 @@ export function Underline(props: Slate.RenderLeafProps) {
   return <u {...props.attributes}>{props.children}</u>;
 }
 
-export const createUnderlinePlugin = (): RichTextPlugin =>
+export const createUnderlinePlugin = (tracking: TrackingProvider): RichTextPlugin =>
   createDefaultUnderlinePlugin({
     type: MARKS.UNDERLINE,
     component: Underline,
     options: {
       hotkey: ['mod+u'],
+    },
+    handlers: {
+      onKeyDown: buildMarkEventHandler(tracking, MARKS.UNDERLINE),
     },
     deserializeHtml: {
       rules: [

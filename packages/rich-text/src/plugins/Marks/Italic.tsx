@@ -9,8 +9,10 @@ import * as Slate from 'slate-react';
 
 import { useContentfulEditor } from '../../ContentfulEditorProvider';
 import { focus } from '../../helpers/editor';
+import { TrackingProvider, useTrackingContext } from '../../TrackingProvider';
 import { RichTextPlugin } from '../../types';
 import { ToolbarButton } from '../shared/ToolbarButton';
+import { buildMarkEventHandler } from './helpers';
 
 interface ToolbarItalicButtonProps {
   isDisabled?: boolean;
@@ -18,9 +20,13 @@ interface ToolbarItalicButtonProps {
 
 export function ToolbarItalicButton(props: ToolbarItalicButtonProps) {
   const editor = useContentfulEditor();
+  const tracking = useTrackingContext();
 
   function handleClick() {
     if (!editor?.selection) return;
+
+    const isActive = isMarkActive(editor, MARKS.ITALIC);
+    tracking.onToolbarAction(isActive ? 'unmark' : 'mark', { markType: MARKS.ITALIC });
 
     toggleMark(editor, { key: MARKS.ITALIC });
     focus(editor);
@@ -54,12 +60,15 @@ export function Italic(props: Slate.RenderLeafProps) {
   );
 }
 
-export const createItalicPlugin = (): RichTextPlugin =>
+export const createItalicPlugin = (tracking: TrackingProvider): RichTextPlugin =>
   createDefaultItalicPlugin({
     type: MARKS.ITALIC,
     component: Italic,
     options: {
       hotkey: ['mod+i'],
+    },
+    handlers: {
+      onKeyDown: buildMarkEventHandler(tracking, MARKS.ITALIC),
     },
     deserializeHtml: {
       rules: [
