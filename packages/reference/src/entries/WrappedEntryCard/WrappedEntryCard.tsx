@@ -5,7 +5,12 @@ import { SpaceAPI } from '@contentful/app-sdk';
 import { EntryCard, MenuItem, MenuDivider } from '@contentful/f36-components';
 import { ContentType, Entry, File, RenderDragFn } from '../../types';
 import { entityHelpers, isValidImage } from '@contentful/field-editor-shared';
-import { AssetThumbnail, MissingEntityCard, ScheduledIconWithTooltip } from '../../components';
+import {
+  AssetThumbnail,
+  MissingEntityCard,
+  ScheduledIconWithTooltip,
+  CardFooter,
+} from '../../components';
 
 import { ClockIcon } from '@contentful/f36-icons';
 
@@ -96,6 +101,8 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
     defaultLocaleCode: props.defaultLocaleCode,
   });
 
+  const audiences = props.entry.fields?.audience?.[props.localeCode];
+
   return (
     <EntryCard
       as={props.entryUrl ? 'a' : 'article'}
@@ -167,8 +174,9 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
         e.preventDefault();
         if (!props.isClickable) return;
         props.onEdit && props.onEdit();
-      }}
-    />
+      }}>
+      <CardFooter audiences={audiences} />
+    </EntryCard>
   );
 }
 
