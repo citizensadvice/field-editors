@@ -103,6 +103,7 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
 
   const audiences = props.entry.fields?.audience?.[props.localeCode];
 
+  console.log(audiences, 'audiences from field-editor');
   return (
     <EntryCard
       as={props.entryUrl ? 'a' : 'article'}
@@ -175,6 +176,7 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
         if (!props.isClickable) return;
         props.onEdit && props.onEdit();
       }}>
+      Audiences to appear here
       <CardFooter audiences={audiences} />
     </EntryCard>
   );
