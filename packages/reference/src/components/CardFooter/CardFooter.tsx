@@ -20,7 +20,7 @@ export function CardFooter(props: CardFooterProps) {
       marginLeft: `-${tokens.spacingM}`,
       paddingLeft: tokens.spacingM,
       paddingRight: tokens.spacingM,
-      marginBottom: `-${tokens.spacingS}`,
+      marginBottom: `-${tokens.spacingXs}`,
     } as React.CSSProperties,
     badge: {
       textTransform: 'none',
