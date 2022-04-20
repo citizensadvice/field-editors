@@ -103,6 +103,10 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
 
   const audiences = props.entry.fields?.audience?.[props.localeCode];
 
+  if (Array.isArray(audiences)) {
+    audiences.sort();
+  }
+
   return (
     <EntryCard
       as={props.entryUrl ? 'a' : 'article'}

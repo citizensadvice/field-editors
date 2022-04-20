@@ -32,7 +32,7 @@ export function CardFooter(props: CardFooterProps) {
   return audiences && audiences.length ? (
     <Flex style={styles.audienceContainer}>
       <Flex flexGrow={1}>
-        <Text fontColor="gray600">Country audience</Text>
+        <Text fontColor="gray600">Audience</Text>
       </Flex>
       {audiences.map((audience: string) => (
         <Badge key={nanoid()} style={styles.badge}>
