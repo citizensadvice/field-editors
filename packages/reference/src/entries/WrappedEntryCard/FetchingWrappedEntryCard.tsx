@@ -1,13 +1,17 @@
 import * as React from 'react';
+
 import { EntryCard } from '@contentful/f36-components';
-import { ContentType, FieldExtensionSDK, NavigatorSlideInfo, RenderDragFn } from '../../types';
-import { WrappedEntryCard, WrappedEntryCardProps } from './WrappedEntryCard';
-import { MissingEntityCard } from '../../components';
-import type { LinkActionsProps } from '../../components';
+import get from 'lodash/get';
+
+import { CustomEntityCardProps, RenderCustomMissingEntityCard } from '../../common/customCardTypes';
 import { useEntities } from '../../common/EntityStore';
 import { ReferenceEditorProps } from '../../common/ReferenceEditor';
-import get from 'lodash/get';
-import { CustomEntityCardProps, RenderCustomMissingEntityCard } from '../../common/customCardTypes';
+import { MissingEntityCard } from '../../components';
+import type { LinkActionsProps } from '../../components';
+import { ContentType, FieldExtensionSDK, NavigatorSlideInfo, RenderDragFn } from '../../types';
+import { WrappedEntryCard, WrappedEntryCardProps } from './WrappedEntryCard';
+
+
 
 export type EntryCardReferenceEditorProps = ReferenceEditorProps & {
   entryId: string;
@@ -69,7 +73,7 @@ export function FetchingWrappedEntryCard(props: EntryCardReferenceEditorProps) {
       : `:${entry.sys.id}:${entry.sys.version}`;
 
   const onEdit = async () => {
-    const slide = await openEntry(props.sdk, get(entry, 'sys.id'), {
+    const slide = await openEntry(props.sdk, props.entryId, {
       bulkEditing: props.parameters.instance.bulkEditing,
       index: props.index,
     });
@@ -77,7 +81,7 @@ export function FetchingWrappedEntryCard(props: EntryCardReferenceEditorProps) {
       props.onAction({
         entity: 'Entry',
         type: 'edit',
-        id: get(entry, 'sys.id'),
+        id: props.entryId,
         contentTypeId: get(entry, 'sys.contentType.sys.id'),
         slide,
       });
@@ -89,7 +93,7 @@ export function FetchingWrappedEntryCard(props: EntryCardReferenceEditorProps) {
       props.onAction({
         entity: 'Entry',
         type: 'delete',
-        id: get(entry, 'sys.id'),
+        id: props.entryId,
         contentTypeId: get(entry, 'sys.contentType.sys.id'),
       });
   };
@@ -141,13 +145,15 @@ export function FetchingWrappedEntryCard(props: EntryCardReferenceEditorProps) {
       onMoveBottom: props.onMoveBottom,
     };
 
-    const { hasCardEditActions } = props;
+    const { hasCardEditActions, hasCardMoveActions, hasCardRemoveActions } = props;
 
     function renderDefaultCard(props?: CustomEntityCardProps) {
       const builtinCardProps: WrappedEntryCardProps = {
         ...sharedCardProps,
         ...props,
-        hasCardEditActions: hasCardEditActions,
+        hasCardEditActions,
+        hasCardMoveActions,
+        hasCardRemoveActions,
         getAsset: getOrLoadAsset,
         getEntityScheduledActions: loadEntityScheduledActions,
         entry: props?.entity || sharedCardProps.entity,

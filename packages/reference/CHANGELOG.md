@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.9](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.8...@contentful/field-editor-reference@4.3.9) (2022-06-21)
+
+**Note:** Version bump only for package @contentful/field-editor-reference
+
+## [4.3.8](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.7...@contentful/field-editor-reference@4.3.8) (2022-06-15)
+
+### Bug Fixes
+
+- don't register onClick callbacks when isClickable is false ([#1163](https://github.com/contentful/field-editors/issues/1163)) ([fe6fc6b](https://github.com/contentful/field-editors/commit/fe6fc6b872acfde3b097c626d2eef81a7cc24193))
+
+## [4.3.7](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.6...@contentful/field-editor-reference@4.3.7) (2022-06-07)
+
+### Bug Fixes
+
+- **reference:** avoid infinite getEntityScheduledActions calls ([#1159](https://github.com/contentful/field-editors/issues/1159)) ([620111b](https://github.com/contentful/field-editors/commit/620111bdca45a083369bdb42be8e93a16b670937))
+
+## [4.3.6](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.5...@contentful/field-editor-reference@4.3.6) (2022-05-24)
+
+### Bug Fixes
+
+- **reference:** show all content types for reference CT filter [HOMER-836] ([#1152](https://github.com/contentful/field-editors/issues/1152)) ([fe1f38d](https://github.com/contentful/field-editors/commit/fe1f38d093649f31701ead308720a64ffaba44b0))
+
+## [4.3.5](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.4...@contentful/field-editor-reference@4.3.5) (2022-05-09)
+
+### Bug Fixes
+
+- fix caching in references entity store ([#1137](https://github.com/contentful/field-editors/issues/1137)) ([1cd8c86](https://github.com/contentful/field-editors/commit/1cd8c861d41d32898ab7bf6b02044462c9f2ca91))
+
+## [4.3.4](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.3...@contentful/field-editor-reference@4.3.4) (2022-05-06)
+
+### Bug Fixes
+
+- add a explanatory comment why we removed useCallback ([4359666](https://github.com/contentful/field-editors/commit/435966687e8e803f7e4fb20f2f7d89101d2fd20a))
+- do not use callback ([811bcfd](https://github.com/contentful/field-editors/commit/811bcfda4a0fadf0701b2d6e712d1871290ebdcb))
+
+## [4.3.3](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.2...@contentful/field-editor-reference@4.3.3) (2022-05-03)
+
+### Bug Fixes
+
+- avoid disabling button if no creatable content type ([#1132](https://github.com/contentful/field-editors/issues/1132)) ([72c7b97](https://github.com/contentful/field-editors/commit/72c7b97019d4a1915fd295592f0724f7be08d424))
+
+## [4.3.2](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.1...@contentful/field-editor-reference@4.3.2) (2022-04-29)
+
+### Bug Fixes
+
+- use creatableContentTypes for create access check ([#1131](https://github.com/contentful/field-editors/issues/1131)) ([5fcf527](https://github.com/contentful/field-editors/commit/5fcf527609605140564eb0ba172c8877b882ebdc))
+
+## [4.3.1](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.3.0...@contentful/field-editor-reference@4.3.1) (2022-04-28)
+
+### Bug Fixes
+
+- always show create asset button to be save in regards of tag-based permissions ([#1124](https://github.com/contentful/field-editors/issues/1124)) ([0aa6db6](https://github.com/contentful/field-editors/commit/0aa6db608201750c03a97c941218ba42a56e9aac))
+
+# [4.3.0](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.2.3...@contentful/field-editor-reference@4.3.0) (2022-04-28)
+
+### Features
+
+- reference hide actions prop [DANTE-488] ([#1120](https://github.com/contentful/field-editors/issues/1120)) ([1f53844](https://github.com/contentful/field-editors/commit/1f538449ad07b36bed908d6e1b0e3744eafa079d))
+
+## [4.2.3](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.2.2...@contentful/field-editor-reference@4.2.3) (2022-04-19)
+
+### Bug Fixes
+
+- always show link existing button to account for tag based permissions [ZEND-1864] ([#1107](https://github.com/contentful/field-editors/issues/1107)) ([3b4ca1f](https://github.com/contentful/field-editors/commit/3b4ca1f2acca530cceab659346fe7769757d90f4))
+
+## [4.2.2](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.2.1...@contentful/field-editor-reference@4.2.2) (2022-03-31)
+
+### Bug Fixes
+
+- pass already known entry link id to onAction ([#1089](https://github.com/contentful/field-editors/issues/1089)) ([5b30d2f](https://github.com/contentful/field-editors/commit/5b30d2fade2edce5c99956108167aa5732b9bfbb))
+
+## [4.2.1](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.2.0...@contentful/field-editor-reference@4.2.1) (2022-03-29)
+
+### Bug Fixes
+
+- allow linking assets on permission rule with tags ([#1085](https://github.com/contentful/field-editors/issues/1085)) ([d7465d0](https://github.com/contentful/field-editors/commit/d7465d05ecc2674c3e10c927c6f2f414adb5df04))
+
+# [4.2.0](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.1.2...@contentful/field-editor-reference@4.2.0) (2022-03-02)
+
+### Features
+
+- support onclick on wrappedentrycard components ([#1053](https://github.com/contentful/field-editors/issues/1053)) ([2480c9c](https://github.com/contentful/field-editors/commit/2480c9cbf1609b9ee2da73a951355a6972fdd859))
+
 ## [4.1.2](https://github.com/contentful/field-editors/compare/@contentful/field-editor-reference@4.1.1...@contentful/field-editor-reference@4.1.2) (2022-02-15)
 
 ### Bug Fixes

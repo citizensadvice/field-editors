@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { SpaceAPI, ScheduledAction } from '@contentful/app-sdk';
+
 import { ScheduleTooltip } from './ScheduleTooltip';
 
 type ScheduledIconWithTooltipProps = {
@@ -29,6 +31,9 @@ export const ScheduledIconWithTooltip = ({
       .catch((e) => {
         setStatus({ type: 'error', error: e });
       });
+    // This should only be ever called once. Following the eslint hint to add used
+    // dependencies will cause page freeze (infinite loop)
+    // eslint-disable-next-line
   }, []);
 
   if (status.type === 'loading' || status.type === 'error') {

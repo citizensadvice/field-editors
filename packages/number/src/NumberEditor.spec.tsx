@@ -1,9 +1,11 @@
 import React from 'react';
-import identity from 'lodash/identity';
+
 import { render, configure, cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import identity from 'lodash/identity';
 import '@testing-library/jest-dom/extend-expect';
 import { createFakeFieldAPI } from '@contentful/field-editor-test-utils';
+
 import { NumberEditor } from './NumberEditor';
 
 configure({
@@ -45,7 +47,7 @@ describe('NumberEditor', () => {
     render(<NumberEditor field={field} isInitiallyDisabled={false} />);
     const $input = screen.getByTestId('number-editor-input');
 
-    expect($input).toHaveValue('42');
+    expect($input).toHaveValue(42);
   });
 
   it('calls setValue when user inputs valid numbers', () => {
@@ -83,10 +85,10 @@ describe('NumberEditor', () => {
     render(<NumberEditor field={field} isInitiallyDisabled={false} />);
     const $input = screen.getByTestId('number-editor-input');
 
-    expect($input).toHaveValue('42');
+    expect($input).toHaveValue(42);
 
     userEvent.clear($input);
-    expect($input).toHaveValue('');
+    expect($input).toHaveValue(null);
     expect(field.setValue).not.toHaveBeenCalled();
     expect(field.removeValue).toHaveBeenCalledTimes(1);
     expect(field.removeValue).toHaveBeenLastCalledWith();
