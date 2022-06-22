@@ -1,12 +1,14 @@
 import * as React from 'react';
+
+import { TextInput } from '@contentful/f36-components';
 import {
   FieldAPI,
   FieldConnector,
   FieldConnectorChildProps,
 } from '@contentful/field-editor-shared';
+
 import { parseNumber } from './parseNumber';
 
-import { TextInput } from '@contentful/f36-components';
 
 export interface NumberEditorProps {
   /**
@@ -75,9 +77,7 @@ function InnerNumberEditor({
         isInvalid={errors.length > 0}
         isDisabled={disabled}
         value={inputValue}
-        // React cannot call onChange for certain changes to type="number"
-        // so we use "text" instead. See https://github.com/facebook/react/issues/6556
-        type="text"
+        type="number"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const parseResult = parseNumber(e.target.value, field.type);
           field.setInvalid(!parseResult.isValid);

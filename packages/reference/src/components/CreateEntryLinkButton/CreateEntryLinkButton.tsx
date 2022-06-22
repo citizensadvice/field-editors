@@ -1,13 +1,14 @@
 import React from 'react';
-import get from 'lodash/get';
-import { css } from 'emotion';
-import { ContentType } from '../../types';
-import tokens from '@contentful/f36-tokens';
-import { CreateEntryMenuTrigger } from './CreateEntryMenuTrigger';
 
 import { Button } from '@contentful/f36-components';
-
 import { ChevronDownIcon, PlusIcon } from '@contentful/f36-icons';
+import tokens from '@contentful/f36-tokens';
+import { css } from 'emotion';
+import get from 'lodash/get';
+
+import { ContentType } from '../../types';
+import { CreateEntryMenuTrigger } from './CreateEntryMenuTrigger';
+
 
 const standardStyles = {
   spinnerMargin: css({
@@ -82,7 +83,7 @@ export const CreateEntryLinkButton = ({
           endIcon={hasDropdown ? <ChevronDownIcon /> : undefined}
           variant="secondary"
           className={styles.action}
-          isDisabled={disabled || isSelecting || (contentTypes && contentTypes.length === 0)}
+          isDisabled={disabled || isSelecting} // (contentTypes && contentTypes.length === 0)}
           startIcon={isSelecting ? undefined : plusIcon}
           size="small"
           testId="create-entry-link-button"

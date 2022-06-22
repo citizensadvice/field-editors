@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { css } from 'emotion';
-import tokens from '@contentful/f36-tokens';
+
 import { SpaceAPI } from '@contentful/app-sdk';
 import { EntryCard, MenuItem, MenuDivider } from '@contentful/f36-components';
-import { ContentType, Entry, File, RenderDragFn } from '../../types';
+import { ClockIcon } from '@contentful/f36-icons';
+import tokens from '@contentful/f36-tokens';
 import { entityHelpers, isValidImage } from '@contentful/field-editor-shared';
+import { css } from 'emotion';
+
 import {
   AssetThumbnail,
   MissingEntityCard,
   ScheduledIconWithTooltip,
   CardFooter,
 } from '../../components';
-
-import { ClockIcon } from '@contentful/f36-icons';
+import { ContentType, Entry, File, RenderDragFn } from '../../types';
 
 const { getEntryTitle, getEntityDescription, getEntryStatus, getEntryImage } = entityHelpers;
 
@@ -31,22 +32,25 @@ export interface WrappedEntryCardProps {
   isSelected?: boolean;
   onRemove?: () => void;
   onEdit?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   localeCode: string;
   defaultLocaleCode: string;
   contentType?: ContentType;
   entry: Entry;
   renderDragHandle?: RenderDragFn;
   isClickable?: boolean;
-  hasCardEditActions: boolean;
   onMoveTop?: () => void;
   onMoveBottom?: () => void;
-  hasMoveOptions?: boolean;
+  hasCardEditActions: boolean;
+  hasCardMoveActions?: boolean;
+  hasCardRemoveActions?: boolean;
 }
 
 const defaultProps = {
   isClickable: true,
   hasCardEditActions: true,
-  hasMoveOptions: true,
+  hasCardMoveActions: true,
+  hasCardRemoveActions: true,
 };
 
 export function WrappedEntryCard(props: WrappedEntryCardProps) {
@@ -146,7 +150,7 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
                   Edit
                 </MenuItem>
               ) : null,
-              props.onRemove ? (
+              props.hasCardRemoveActions && props.onRemove ? (
                 <MenuItem
                   key="delete"
                   testId="delete"
@@ -156,15 +160,15 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
                   Remove
                 </MenuItem>
               ) : null,
-              props.hasMoveOptions && (props.onMoveTop || props.onMoveBottom) ? (
+              props.hasCardMoveActions && (props.onMoveTop || props.onMoveBottom) ? (
                 <MenuDivider />
               ) : null,
-              props.hasMoveOptions && props.onMoveTop ? (
+              props.hasCardMoveActions && props.onMoveTop ? (
                 <MenuItem onClick={() => props.onMoveTop && props.onMoveTop()} testId="move-top">
                   Move to top
                 </MenuItem>
               ) : null,
-              props.hasMoveOptions && props.onMoveBottom ? (
+              props.hasCardMoveActions && props.onMoveBottom ? (
                 <MenuItem
                   onClick={() => props.onMoveBottom && props.onMoveBottom()}
                   testId="move-bottom">
@@ -174,11 +178,19 @@ export function WrappedEntryCard(props: WrappedEntryCardProps) {
             ].filter((item) => item)
           : []
       }
-      onClick={(e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-        if (!props.isClickable) return;
-        props.onEdit && props.onEdit();
-      }}>
+      onClick={
+        // Providing an onClick handler messes up with some rich text
+        // features e.g. pressing ENTER on a card to add a new paragraph
+        // underneath. It's crucial not to pass a custom handler when
+        // isClickable is disabled which in the case of RT it's.
+        props.isClickable
+          ? (e: React.MouseEvent<HTMLElement>) => {
+              e.preventDefault();
+              if (props.onClick) return props.onClick(e);
+              props.onEdit && props.onEdit();
+            }
+          : undefined
+      }>
       <CardFooter audiences={audiences} />
     </EntryCard>
   );

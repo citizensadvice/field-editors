@@ -1,15 +1,16 @@
-import noop from 'lodash/noop';
 import React, { useState, useCallback } from 'react';
-import { css } from 'emotion';
-import tokens from '@contentful/f36-tokens';
-import { TagsEditorConstraints } from './TagsEditorConstraints';
-import { ConstraintsType, Constraint } from './types';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
-import arrayMove from 'array-move';
+
 
 import { Pill, TextInput } from '@contentful/f36-components';
-
 import { DragIcon } from '@contentful/f36-icons';
+import tokens from '@contentful/f36-tokens';
+import arrayMove from 'array-move';
+import { css, cx } from 'emotion';
+import noop from 'lodash/noop';
+
+import { TagsEditorConstraints } from './TagsEditorConstraints';
+import { ConstraintsType, Constraint } from './types';
 
 export interface TagsEditorProps {
   items: string[];
@@ -34,6 +35,14 @@ const styles = {
     marginRight: tokens.spacingS,
     marginBottom: tokens.spacingS,
   }),
+  pillDisabled: css({
+    cursor: 'not-allowed !important',
+    button: {
+      cursor: 'not-allowed !important',
+      // instead of changing the @contentful/f36-components package
+      pointerEvents: 'none',
+    },
+  }),
   handle: css({
     lineHeight: '1.5rem',
     padding: '0.375rem 0.625rem',
@@ -47,8 +56,8 @@ const styles = {
   }),
 };
 
-const SortablePillHandle = SortableHandle(() => (
-  <div className={styles.handle}>
+const SortablePillHandle = SortableHandle((props: { isDisabled: boolean }) => (
+  <div className={cx(styles.handle, { [styles.pillDisabled]: props.isDisabled })}>
     <DragIcon variant="muted" />
   </div>
 ));
@@ -56,22 +65,22 @@ const SortablePillHandle = SortableHandle(() => (
 interface SortablePillProps {
   label: string;
   onRemove: Function;
-  disabled: boolean;
+  isSortablePillDisabled: boolean;
   index: number;
 }
 
 const SortablePill = SortableElement((props: SortablePillProps) => (
   <Pill
     testId="tag-editor-pill"
-    className={styles.pill}
+    className={cx(styles.pill, { [styles.pillDisabled]: props.isSortablePillDisabled })}
     label={props.label}
     onClose={() => {
-      if (!props.disabled) {
+      if (!props.isSortablePillDisabled) {
         props.onRemove(props.index);
       }
     }}
     onDrag={noop}
-    dragHandleComponent={<SortablePillHandle />}
+    dragHandleComponent={<SortablePillHandle isDisabled={props.isSortablePillDisabled} />}
   />
 ));
 
@@ -138,6 +147,12 @@ export function TagsEditor(props: TagsEditorProps) {
               index={index}
               key={item + index}
               disabled={isDisabled}
+              /**
+               * `isSortablePillDisabled` is needed as SortableElement
+               * from react-sortable-hoc doesn't pass down the disabled prop.
+               * See: https://github.com/clauderic/react-sortable-hoc/issues/612
+               */
+              isSortablePillDisabled={isDisabled}
               onRemove={() => {
                 removeItem(index);
               }}
